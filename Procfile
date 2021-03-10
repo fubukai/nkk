@@ -1,0 +1,1 @@
+web: gunicorn pdd_regist.wsgi

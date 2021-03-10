@@ -1,0 +1,41 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>ลงทะเบียนฝึกอบรม</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    </head>
+
+    <body>
+        <div class="container mt-5">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item active">กองพัฒนาบุคลากร</li>
+            </ol>
+            <form method="POST" >
+                {% csrf_token %}
+                <div class="form-group">
+                    <h3>ลงชื่อเข้าใช้</h3>
+                </br>
+                        <div class="form-row">
+                            <div class="col-sm-4"><input type="text" id="StaffID" name="StaffID" class="form-control" placeholder="รหัสพนักงาน"></div>
+                            <div class="col-sm-4"><input type="password" id="StaffPS" name="StaffPS" class="form-control" placeholder="รหัสผ่านเข้าเครื่องคอมพิวเตอร์"></div>
+                            <div class="col-sm-4"><input type="submit" value="เข้าสู่ระบบ" class="btn btn-primary"></div>
+                        </div>   
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>{{ massage.massage }}</label>
+                            </div>
+                        </div>
+                        
+                </div>
+            </form>
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
+            </ol>
+        </div>
+
+    </body>
+
+</html>
