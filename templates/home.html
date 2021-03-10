@@ -1,0 +1,100 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>ลงทะเบียนฝึกอบรม</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    </head>
+
+    <body>
+        <div class="container mt-5">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item active">กองพัฒนาบุคลากร</li>
+            </ol>
+            <div class="card p-4">
+                <h3>หลักสูตรที่เปิดลงทะเบียน</h3>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr class="stylefont text-center">
+                            <th class="align-middle">ลำดับ</th>
+                            <th class="align-middle">รุ่นที่</th>
+                            <th>วันที่เริ่มต้น</th>
+                            <th>วันที่สิ้นสุด</th>
+                            <th>สถานที่</th>
+                            <th>จำนวนคน</th>
+                            <th>ลงทะเบียนแล้ว</th>
+                            <th>คงเหลือ</th>
+                            <th>ลงทะเบียน</th>
+                            <th>รายชื่อ</th>
+                        </tr>
+                    </thead>
+                        {% for course in courses %}
+                            <tr>
+                                <td class="align-middle">{{ forloop.counter }}</td>
+                                <td class="align-middle">{{ course.Course_Name }}รุ่นที่ {{ course.Batch_Type }}</td>
+                                <td class="align-middle">{{ course.Start_Date }}</td>
+                                <td class="align-middle">{{ course.End_Date }}</td>
+                                <td class="align-middle">{{ course.Location }}</td>
+                                <td class="align-middle">{{ course.Number_App }}</td>
+                                <td class="align-middle">{{ course.Number_People }}</td>
+                                <td class="align-middle">{{ course.Gap_number }}</td>
+                                {% if course.PK_Course_D == 60 %}
+                                    {% if Cut_Dept_code == '6301' or Cut_Dept_code == '5501' or Cut_Dept_code == '4100' or Cut_Dept_code == '4200' or Cut_Dept_code == '4300' or Cut_Dept_code == '4400' or Cut_Dept_code == '3101' or Cut_Dept_code == '2101' or Cut_Dept_code == '6101' or Cut_Dept_code == '5201' or Cut_Dept_code == '1005' or Cut_Dept_code == '1002' or Cut_Dept_code == '1001' or Cut_Dept_code == '5401' or Cut_Dept_code == '5301' or Cut_Dept_code == '3201' or Cut_Dept_code == '6201' %}
+                                        {% if course.Number_App > course.Number_People %}
+                                            <td class="align-middle"><a href="{% url 'course_SD_HQ' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                        {% else %}
+                                            <td class="align-middle">เต็ม</td>
+                                        {% endif %}
+                                    {% else %}
+                                        <td class="align-middle">เฉพาะกลุ่ม</td>
+                                    {% endif %}
+                                    <td class="align-middle"><a href="{% url 'course_register_SD_HQ' course.PK_Course_D %}">รายชื่อ</a></td>
+                                {% elif course.PK_Course_D == 61 %}
+                                    {% if Cut_Dept_code == '6301' or Cut_Dept_code == '4101' or Cut_Dept_code == '4102' or Cut_Dept_code == '4103' or Cut_Dept_code == '4201' or Cut_Dept_code == '4202' or Cut_Dept_code == '4203' or Cut_Dept_code == '4301' or Cut_Dept_code == '4302' or Cut_Dept_code == '4303' or Cut_Dept_code == '4401' or Cut_Dept_code == '4402' or Cut_Dept_code == '4403' %}
+                                        {% if course.Number_App > course.Number_People %}
+                                            <td class="align-middle"><a href="{% url 'course_SD_RE' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                        {% else %}
+                                            <td class="align-middle">เต็ม</td>
+                                        {% endif %}
+                                    {% else %}
+                                        <td class="align-middle">เฉพาะกลุ่ม</td>
+                                    {% endif %}
+                                    <td class="align-middle"><a href="{% url 'course_title' course.PK_Course_D %}">รายชื่อ</a></td>
+                                {% elif course.PK_Course_D == 51 %}
+                                    {% if course.Number_App > course.Number_People %}
+                                        <td class="align-middle"><a href="{% url 'course_KM3' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                    {% else %}
+                                        <td class="align-middle">เต็ม</td>
+                                    {% endif %}
+                                {% elif course.PK_Course_D == 52 %}
+                                    {% if course.Number_App > course.Number_People %}
+                                        <td class="align-middle"><a href="{% url 'course_KM4' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                    {% else %}
+                                        <td class="align-middle">เต็ม</td>
+                                    {% endif %}
+                                {% else %}
+                                    {% if course.Number_App > course.Number_People %}
+                                    <td class="align-middle"><a href="{% url 'course_title' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                    {% else %}
+                                    <td class="align-middle">เต็ม</td>
+                                    {% endif %}
+                                    <td class="align-middle"><a href="{% url 'course_title' course.PK_Course_D %}">รายชื่อ</a></td>
+                                {% endif %}
+                                
+
+                            </tr>
+                        {% endfor %}
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
+            </ol>
+        </div>
+
+    </body>
+
+</html>

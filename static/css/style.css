@@ -1,0 +1,24 @@
+html {
+    position: relative;
+    min-height: 100%;
+  }
+  body {
+    margin-bottom: 120px;
+  }
+  .footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0.8rem;
+    /* padding: 5px; */
+    /* background-color: #efefef;
+    background-color: #593196; */
+    text-align: center;
+  }
+  
+  .stylefont{
+    font-family: "Maledpan",sans-serif;
+    font-style: normal;
+  }
+  

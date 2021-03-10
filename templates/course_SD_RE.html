@@ -1,0 +1,683 @@
+{% load i18n static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>ลงทะเบียนฝึกอบรม</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" />
+        <script src="{% static 'js/datatable.js' %}"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <script type="text/javascript">
+        var USERS_LIST_JSON_URL = '{% url "order_list_json" %}';
+        var oLanguages = {
+                oPaginate:{
+                    sFirst:'<<',
+                    sLast: '>>',
+                    sNext: '>',
+                    sPrevious: '<'
+                },
+                sInfo:'{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}',
+                sInfoEmpty: '{% trans "No entries to show" %}',
+                sInfoFiltered: '{% trans "(filtered from _MAX_ total entries)" %}',
+                sLengthMenu:'{% trans "Show _MENU_ entries" %}',
+                sProcessing: '{% trans "Processing" %}',
+                sSearch: '{% trans "Filter records:" %}',
+                sZeroRecords: '{% trans "No data to show" %}'
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <ol class="breadcrumb my-4">
+                <li class="breadcrumb-item active"><a href="{% url 'home' %}">หลักสูตร กพค.</a></li>
+            </ol>
+        
+        <div class="container mt-2">
+            <div class="col-md-12">
+                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} รุ่นที่ {{ course.Batch_Type }}</h3>
+                <h3 class="text-center">วันที่เริ่ม {{course.Start_Date}}</h3>
+                <h3 class="text-center">วันที่สิ้นสุด {{course.End_Date}}</h3>
+                <h3 class="text-center">สถานที่จัด {{course.Location}}</h3>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-3">
+                    <h3>ลงทะเบียน</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if check_student == 'add' %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6"><label for="Emp_id"><b>ชื่อ</b> {{ profile.Fullname }}({{ profile.Emp_id }})</label></div>
+                                <div class="col-sm-6"><label for="Emp_id"><b>สังกัด</b> {{ profile.Dept }}</label></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input type="text" id="Emp_tel" name="Emp_tel" class="form-control" placeholder="เบอร์มือถือ" required>
+                                </div>
+                            </div>
+                            </br>
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-success text-center">ลงทะเบียน</button>
+                                </div>
+                            </div>
+                            </br>
+                            {% if paper == 'open' %}
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                        <label class="text-danger"><b>ท่านได้ลงทะเบียนเรียบร้อยแล้ว <a href="/static/doc/Smart_Director_RE_no2.pdf" target="_blank">สามารถดาวโหลดอนุมัติเข้าอบรมได้ที่นี่</a></b></label>
+                                </div>
+                            </div> 
+                            {% endif %}  
+                            <!-- <div class="row">
+                                <div class="col-sm-12 text-center">
+                                        <label class="text-danger">ทาง ผจค. จะส่ง link เข้าเรียน ผ่าน e-mail ของ pea ล่วงหน้า 2 วัน</label>
+                                </div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                        <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ ผพผ. เบอร์ 02-590-5869 หรือ exepea5869@gmail.com</label>
+                                </div>
+                            </div>
+
+                            </br>
+                            <div class="row">
+                                <div class="col-sm-12 text-center" ><label for="massage_error" class="text-danger text-center">{{ massage }}</label></div>
+                            </div>
+                        </div>
+                        
+                        {% else %}
+                        <div class="row">
+                            <div class="col-sm-12 text-center" ><h4 for="Emp_id" class="text-danger text-center">หลักสูตรนี้ปิดการลงทะเบียนแล้ว</h4></div>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+                <div><label>เขต น.1 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                <table class="table table-striped stylefont">
+                    <thead class="thead-light">
+                        <tr class="stylefont text-center">
+                            <th class="align-middle">ลำดับที่</th>
+                            <th class="align-middle">รหัสพนักงาน</th>
+                            <th class="align-middle">ชื่อ</th>
+                            <th class="align-middle">ตำแหน่ง</th>
+                            <th>สังกัด</th>
+                            <th>วันที่สมัคร</th>
+                        </tr>
+                    </thead>
+                        {% for student1 in Group1_Qset %}
+                            <tr class="stylefont text-center">
+                                <td class="align-middle">{{ forloop.counter }}</td>
+                                <td class="align-middle">{{ student1.E_ID }}</td>
+                                <td class="align-middle">{{ student1.Fullname }}</td>
+                                <td class="align-middle">{{ student1.Position }}
+                                                        {% if student1.Level == "M1" %}
+                                                            </td>
+                                                        {% elif student1.Level == "M2" %}
+                                                            </td>
+                                                        {% elif student1.Level == "M3" %}
+                                                            </td> 
+                                                        {% elif student1.Level == "M4" %}
+                                                            </td>
+                                                        {% elif student1.Level == "M5" %}
+                                                            </td>
+                                                        {% elif student1.Level == "M6" %}
+                                                            </td>  
+                                                        {% elif student1.Level == "S1" %}
+                                                            </td> 
+                                                        {% elif student1.Level == "S2" %}
+                                                            </td>                                                       
+                                                        {% else %}
+                                                            {{ student1.Level }}</td>
+                                                        {% endif %}
+                                <td class="align-middle">{{ student1.Dep }}</td>
+                                <td class="align-middle">{{ student1.Regist_Date }}</td>
+                            </tr>
+                            
+                        {% endfor %}
+                    <tbody>
+                </table>
+                </div>
+
+                <div><label>เขต น.2 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for student2 in Group2_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ student2.E_ID }}</td>
+                                    <td class="align-middle">{{ student2.Fullname }}</td>
+                                    <td class="align-middle">{{ student2.Position }}
+                                                            {% if student2.Level == "M1" %}
+                                                                </td>
+                                                            {% elif student2.Level == "M2" %}
+                                                                </td>
+                                                            {% elif student2.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif student2.Level == "M4" %}
+                                                                </td>
+                                                            {% elif student2.Level == "M5" %}
+                                                                </td>
+                                                            {% elif student2.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif student2.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif student2.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ student2.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ student2.Dep }}</td>
+                                    <td class="align-middle">{{ student2.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต น.3 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for student3 in Group3_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ student3.E_ID }}</td>
+                                    <td class="align-middle">{{ student3.Fullname }}</td>
+                                    <td class="align-middle">{{ student3.Position }}
+                                                            {% if student3.Level == "M1" %}
+                                                                </td>
+                                                            {% elif student3.Level == "M2" %}
+                                                                </td>
+                                                            {% elif student3.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif student3.Level == "M4" %}
+                                                                </td>
+                                                            {% elif student3.Level == "M5" %}
+                                                                </td>
+                                                            {% elif student3.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif student3.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif student3.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ student3.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ student3.Dep }}</td>
+                                    <td class="align-middle">{{ student3.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ฉ.1 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for student4 in Group4_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ student4.E_ID }}</td>
+                                    <td class="align-middle">{{ student4.Fullname }}</td>
+                                    <td class="align-middle">{{ student4.Position }}
+                                                            {% if student4.Level == "M1" %}
+                                                                </td>
+                                                            {% elif student4.Level == "M2" %}
+                                                                </td>
+                                                            {% elif student4.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif student4.Level == "M4" %}
+                                                                </td>
+                                                            {% elif student4.Level == "M5" %}
+                                                                </td>
+                                                            {% elif student4.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif student4.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif student4.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ student4.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ student4.Dep }}</td>
+                                    <td class="align-middle">{{ student4.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ฉ.2 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for student5 in Group5_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ student5.E_ID }}</td>
+                                    <td class="align-middle">{{ student5.Fullname }}</td>
+                                    <td class="align-middle">{{ student5.Position }}
+                                                            {% if student5.Level == "M1" %}
+                                                                </td>
+                                                            {% elif student5.Level == "M2" %}
+                                                                </td>
+                                                            {% elif student5.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif student5.Level == "M4" %}
+                                                                </td>
+                                                            {% elif student5.Level == "M5" %}
+                                                                </td>
+                                                            {% elif student5.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif student5.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif student5.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ student5.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ student5.Dep }}</td>
+                                    <td class="align-middle">{{ student5.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ฉ.3 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for student6 in Group6_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ student6.E_ID }}</td>
+                                    <td class="align-middle">{{ student6.Fullname }}</td>
+                                    <td class="align-middle">{{ student6.Position }}
+                                                            {% if student6.Level == "M1" %}
+                                                                </td>
+                                                            {% elif student6.Level == "M2" %}
+                                                                </td>
+                                                            {% elif student6.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif student6.Level == "M4" %}
+                                                                </td>
+                                                            {% elif student6.Level == "M5" %}
+                                                                </td>
+                                                            {% elif student6.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif student6.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif student6.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ student6.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ student6.Dep }}</td>
+                                    <td class="align-middle">{{ student6.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ก.1 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group7_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ก.2 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group8_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ก.3 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group9_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ต.1 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group10_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ต.2 (สูงสุดจำนวน 2 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group11_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <div><label>เขต ต.3 (สูงสุดจำนวน 3 ท่าน)</label></div>
+                <div>
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                            {% for i in Group12_Qset %}
+                                <tr class="stylefont text-center">
+                                    <td class="align-middle">{{ forloop.counter }}</td>
+                                    <td class="align-middle">{{ i.E_ID }}</td>
+                                    <td class="align-middle">{{ i.Fullname }}</td>
+                                    <td class="align-middle">{{ i.Position }}
+                                                            {% if i.Level == "M1" %}
+                                                                </td>
+                                                            {% elif i.Level == "M2" %}
+                                                                </td>
+                                                            {% elif i.Level == "M3" %}
+                                                                </td> 
+                                                            {% elif i.Level == "M4" %}
+                                                                </td>
+                                                            {% elif i.Level == "M5" %}
+                                                                </td>
+                                                            {% elif i.Level == "M6" %}
+                                                                </td>  
+                                                            {% elif i.Level == "S1" %}
+                                                                </td> 
+                                                            {% elif i.Level == "S2" %}
+                                                                </td>                                                       
+                                                            {% else %}
+                                                                {{ i.Level }}</td>
+                                                            {% endif %}
+                                    <td class="align-middle">{{ i.Dep }}</td>
+                                    <td class="align-middle">{{ i.Regist_Date }}</td>
+                                </tr>
+                                
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                
+                <!-- {% block content %}
+                <table class="datatable">
+                    <thead>
+                        <th>{% trans "Fullname" %}</th>
+                        <th>{% trans "Dep" %}</th>
+                        <th>{% trans "Register date" %}</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                {% endblock %} -->
+            </div>
+        </div>
+        <ol class="breadcrumb my-4">
+            <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
+        </ol>
+    </div>
+    </body>
+</html>
