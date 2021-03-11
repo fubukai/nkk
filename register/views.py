@@ -7,6 +7,8 @@ from django.shortcuts import redirect
 import requests, xmltodict
 import string
 from django.db.models import Q, F
+from django.core.exceptions import FieldDoesNotExist, FieldError
+from django.db.models import FileField
 
 def login(request):
     try:
@@ -920,3 +922,6 @@ def update_eng(request):
                 }
 
     return render(request, 'update_eng.html', {'mgs':mgs})
+
+def course_base(request):
+    return render(request,'course_base.html')

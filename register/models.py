@@ -34,6 +34,21 @@ class Course_D(models.Model):
     Start_Time = models.DateTimeField(null=True)
     End_Time = models.DateTimeField(null=True)
     status = models.IntegerField(null=True, default=1)
+    #เพิ่มเกี่ยวกับตาราง
+    """#กล่องแรก
+    detail01 = models.CharField(max_length=300,blank=True)
+    subject01 = models.CharField(max_length=150,blank=True)
+    url01 = models.CharField(max_length=100,blank=True)
+    #กล่องที่2
+    detail02 = models.CharField(max_length=300,blank=True)
+    subject02 = models.CharField(max_length=150,blank=True)
+    url02 = models.CharField(max_length=100,blank=True)
+    #กล่องที่3
+    detail03 = models.CharField(max_length=300,blank=True)
+    subject03 = models.CharField(max_length=150,blank=True)
+    url03 = models.CharField(max_length=100,blank=True)
+    """
+
     def __str__(self):
         return self.Course_ID
 
