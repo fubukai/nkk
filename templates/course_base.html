@@ -1,0 +1,228 @@
+{% load i18n static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ลงทะเบียนฝึกอบรม</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" />
+    <script src="{% static 'js/datatable.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> {% comment %} ตัวกล่อง {% endcomment %}
+    <style>
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            font-size: 17;
+            text-align: center;
+        }
+        
+        .grid-item {
+            display: inline-block;
+            width: 350px;
+            height: 450px;
+            font-size: 1rem;
+            vertical-align: top;
+            margin: 5px;
+        }
+        
+        .box1 {
+            background-color: white;
+        }
+    </style>
+    {% comment %} ตัวกล่อง {% endcomment %}
+</head>
+
+<body>
+    <div class="container mt-5">
+        <ol class="breadcrumb my-4">
+            <li class="breadcrumb-item active"><a href="{% url 'home' %}">หลักสูตร กพค.</a></li>
+        </ol>
+
+        <div class="container mt-2">
+            <div class="col-md-12">
+                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} รุ่นที่ {{ course.Batch_Type }}</h3>
+                <h3 class="text-center">วันที่เริ่ม {{course.Start_Date}}</h3>
+                <h3 class="text-center">วันที่สิ้นสุด {{course.End_Date}}</h3>
+                <h3 class="text-center">สถานที่จัด {{course.Location}}</h3>
+            </div>
+        </div>
+        {% comment %} กล่องที่ 1 {% endcomment %}
+        <div class="grid-item box1">
+            <div class="card">
+                <h3>{{course.subject01}}</h3>
+                <iframe width="350" height="150" src={{course.url01}}>
+                    </iframe>
+                <span>{{course.detail01}}</span>
+            </div>
+        </div>
+        {% comment %} กล่องที่ 2 {% endcomment %}
+        <div class="grid-item box1">
+            <div class="card">
+                <h3>{{course.subject02}}</h3>
+                <iframe width="350" height="150" src={{course.url02}}>
+                    </iframe>
+                <span>{{course.detail02}}</span>
+            </div>
+        </div>
+        {% comment %} กล่องที่ 3 {% endcomment %}
+        <div class="grid-item box1">
+            <div class="card">
+                <h3>{{course.subject03}}</h3>
+                <iframe width="350" height="150" src={{course.url03}}>
+                    </iframe>
+                <span>{{course.detail03}}</span>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-3">
+                    <h3>ลงทะเบียน</h3>
+                    <form method="post">
+                        {% csrf_token %} {% if course.Number_App > course.Number_People %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6"><label for="Emp_id"><b>ชื่อ</b> {{ profile.Fullname }}({{ profile.Emp_id }})</label></div>
+                                <div class="col-sm-6"><label for="Emp_id"><b>สังกัด</b> {{ profile.Dept }}</label></div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <input type="text" id="Emp_tel" name="Emp_tel" class="form-control" placeholder="เบอร์มือถือ" required>
+                                </div>
+                            </div>
+                            </br>
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-success text-center">ลงทะเบียน</button>
+                                </div>
+                            </div>
+                            </br>
+                            {% if course.PK_Course_D == 60 or course.PK_Course_D == 61 %}
+
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ ผพผ. เบอร์ 02-590-5869 หรือ exepea5869@gmail.com</label>
+                                </div>
+                            </div>
+
+                            {% else %}
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <label class="text-danger">ทาง ผจค. จะส่ง link เข้าเรียน ผ่าน e-mail ที่ท่านแจ้งไว้ ล่วงหน้า 2 วัน</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ อัศวิน เบอร์ 02-590-5858 หรือ kmpea5858@gmail.com</label>
+                                </div>
+                            </div>
+
+                            {% endif %}
+
+                            </br>
+                            <div class="row">
+                                <div class="col-sm-12 text-center"><label for="massage_error" class="text-danger text-center">{{ massage }}</label></div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h4 for="Emp_id" class="text-danger text-center">หลักสูตรนี้ปิดการลงทะเบียนแล้ว</h4>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <div>
+                    <table class="table table-striped stylefont mt-5">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>e-mail ที่ลงทะเบียน</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                        {% for student in student %}
+                        <tr class="stylefont text-center">
+                            <td class="align-middle">{{ forloop.counter }}</td>
+                            <td class="align-middle">{{ student.E_ID }}</td>
+                            <td class="align-middle">{{ student.Fullname }}</td>
+                            <td class="align-middle">{{ student.Position }} {% if student.Level == "M1" %}
+                            </td>
+                            {% elif student.Level == "M2" %}
+                            </td>
+                            {% elif student.Level == "M3" %}
+                            </td>
+                            {% elif student.Level == "M4" %}
+                            </td>
+                            {% elif student.Level == "M5" %}
+                            </td>
+                            {% elif student.Level == "M6" %}
+                            </td>
+                            {% elif student.Level == "S1" %}
+                            </td>
+                            {% elif student.Level == "S2" %}
+                            </td>
+                            {% else %} {{ student.Level }}</td>
+                            {% endif %}
+                            <td class="align-middle">{{ student.Dep }}</td>
+                            <td class="align-middle">{{ student.Email }}</td>
+                            <td class="align-middle">{{ student.Regist_Date }}</td>
+                        </tr>
+
+                        {% endfor %}
+                        <tbody>
+                    </table>
+                </div>
+
+                <!-- {% block content %}
+                <table class="datatable">
+                    <thead>
+                        <th>{% trans "Fullname" %}</th>
+                        <th>{% trans "Dep" %}</th>
+                        <th>{% trans "Register date" %}</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                {% endblock %} -->
+            </div>
+        </div>
+    </div>
+
+    <ol class="breadcrumb my-4">
+        <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
+    </ol>
+    </div>
+    {% comment %}
+    <div class="container mt-5">
+        <ol class="breadcrumb my-4">
+            <li class="breadcrumb-item active"><a href="{% url 'home' %}">หลักสูตร กพค.</a></li>
+        </ol>
+
+        <div class="container mt-2">
+            <div class="col-md-12">
+                <h3 class="text-center">หลักสูตร AAAAA รุ่นที่ 55</h3>
+                <h3 class="text-center">วันที่เริ่ม 123</h3>
+                <h3 class="text-center">วันที่สิ้นสุด 000</h3>
+                <h3 class="text-center">สถานที่จัด online</h3>
+            </div>
+        </div>
+        ส่วนเพิ่ม
+        <div id="box-1"></div>
+        <div id="box-2"></div>
+        <div id="box-3"></div>
+        <ol class="breadcrumb my-4">
+            <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
+        </ol>
+    </div> {% endcomment %}
+</body>
+
+</html>
