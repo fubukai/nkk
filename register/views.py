@@ -6,8 +6,9 @@ from .forms import SaveForm
 from django.shortcuts import redirect
 import requests, xmltodict
 import string
-from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Q, F
+from django.core.exceptions import FieldDoesNotExist, FieldError
+from django.db.models import FileField
 
 def login(request):
     try:
@@ -249,18 +250,6 @@ def checkStudent(Emp_id):
     else :
         rerult = 0
     return rerult
-
-class UsersListJson(BaseDatatableView):
-        # The model we're going to show
-        model = List_Emp
-        columns = ['Fullname', 'Dep', 'Regist_Date']
-        order_columns = ['Regist_Date','Dep','Fullname']
-
-        def filter_queryset(self, qs):
-            sSearch = self.request.GET.get('sSearch', None)
-            if sSearch:
-                qs = qs.filter(Q(Fullname__istartswith=sSearch) | Q(Dep__istartswith=sSearch))
-            return qs
 
 def course_KM(request, PK_Course_D):
     Emp_id = request.session['Emp_id']
@@ -929,3 +918,6 @@ def update_eng(request):
                 }
 
     return render(request, 'update_eng.html', {'mgs':mgs})
+
+def course_base(request):
+    return render(request,'course_base.html')
