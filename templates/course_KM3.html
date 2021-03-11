@@ -1,5 +1,6 @@
 {% load i18n static %}
 <html lang="en">
+<<<<<<< HEAD
     <head>
         <meta charset="utf-8">
         <title>ลงทะเบียนฝึกอบรม</title>
@@ -34,6 +35,44 @@
                 <li class="breadcrumb-item active"><a href="{% url 'home' %}">หลักสูตร กพค.</a></li>
             </ol>
         
+=======
+
+<head>
+    <meta charset="utf-8">
+    <title>ลงทะเบียนฝึกอบรม</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" />
+    <script src="{% static 'js/datatable.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script type="text/javascript">
+        var USERS_LIST_JSON_URL = '{% url "order_list_json" %}';
+        var oLanguages = {
+            oPaginate: {
+                sFirst: '<<',
+                sLast: '>>',
+                sNext: '>',
+                sPrevious: '<'
+            },
+            sInfo: '{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}',
+            sInfoEmpty: '{% trans "No entries to show" %}',
+            sInfoFiltered: '{% trans "(filtered from _MAX_ total entries)" %}',
+            sLengthMenu: '{% trans "Show _MENU_ entries" %}',
+            sProcessing: '{% trans "Processing" %}',
+            sSearch: '{% trans "Filter records:" %}',
+            sZeroRecords: '{% trans "No data to show" %}'
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <ol class="breadcrumb my-4">
+            <li class="breadcrumb-item active"><a href="{% url 'home' %}">หลักสูตร กพค.</a></li>
+        </ol>
+
+>>>>>>> 1-by-namkhing
         <div class="container mt-2">
             <div class="col-md-12">
                 <h3 class="text-center">หลักสูตร {{ course.Course_Name }} รุ่นที่ {{ course.Batch_Type }}</h3>
@@ -42,13 +81,21 @@
                 <h3 class="text-center">สถานที่จัด {{course.Location}}</h3>
             </div>
         </div>
+<<<<<<< HEAD
+=======
+        {% include "suggest.html" %}
+>>>>>>> 1-by-namkhing
         <div class="card p-4">
             <div class="col-md-12 mb-3">
                 <div class="col-md-12 mb-3">
                     <h3>ลงทะเบียน</h3>
                     <form method="post">
+<<<<<<< HEAD
                         {% csrf_token %}
                         {% if check_student == 'add' %}
+=======
+                        {% csrf_token %} {% if check_student == 'add' %}
+>>>>>>> 1-by-namkhing
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6"><label for="Emp_id"><b>ชื่อ</b> {{ profile.Fullname }}({{ profile.Emp_id }})</label></div>
@@ -68,22 +115,36 @@
                             </br>
                             <div class="row">
                                 <div class="col-sm-12 text-center">
+<<<<<<< HEAD
                                         <label class="text-danger"><b>โดยผู้เรียนจะต้องจัดเตรียม "หูฟังที่มีไมค์" ใช้สำหรับพูดคุยแสดงความคิดเห็นร่วมกับเพื่อนในชั้นเรียน</b></label>
                                 </div>
                             </div>   
                             <div class="row">
                                 <div class="col-sm-12 text-center">
                                         <label class="text-danger">ทาง ผจค. จะส่ง link เข้าเรียน ผ่าน e-mail ของ pea ล่วงหน้า 2 วัน</label>
+=======
+                                    <label class="text-danger"><b>โดยผู้เรียนจะต้องจัดเตรียม "หูฟังที่มีไมค์" ใช้สำหรับพูดคุยแสดงความคิดเห็นร่วมกับเพื่อนในชั้นเรียน</b></label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 text-center">
+                                    <label class="text-danger">ทาง ผจค. จะส่ง link เข้าเรียน ผ่าน e-mail ของ pea ล่วงหน้า 2 วัน</label>
+>>>>>>> 1-by-namkhing
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+<<<<<<< HEAD
                                         <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ อัศวิน เบอร์ 02-590-5858 หรือ kmpea5858@gmail.com</label>
+=======
+                                    <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ อัศวิน เบอร์ 02-590-5858 หรือ kmpea5858@gmail.com</label>
+>>>>>>> 1-by-namkhing
                                 </div>
                             </div>
 
                             </br>
                             <div class="row">
+<<<<<<< HEAD
                                 <div class="col-sm-12 text-center" ><label for="massage_error" class="text-danger text-center">{{ massage }}</label></div>
                             </div>
                         </div>
@@ -91,12 +152,24 @@
                         {% else %}
                         <div class="row">
                             <div class="col-sm-12 text-center" ><h4 for="Emp_id" class="text-danger text-center">หลักสูตรนี้ปิดการลงทะเบียนแล้ว</h4></div>
+=======
+                                <div class="col-sm-12 text-center"><label for="massage_error" class="text-danger text-center">{{ massage }}</label></div>
+                            </div>
+                        </div>
+
+                        {% else %}
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h4 for="Emp_id" class="text-danger text-center">หลักสูตรนี้ปิดการลงทะเบียนแล้ว</h4>
+                            </div>
+>>>>>>> 1-by-namkhing
                         </div>
                         {% endif %}
                     </form>
                 </div>
                 <div><label>เขต กฟก.1</label></div>
                 <div>
+<<<<<<< HEAD
                 <table class="table table-striped stylefont">
                     <thead class="thead-light">
                         <tr class="stylefont text-center">
@@ -140,6 +213,49 @@
                         {% endfor %}
                     <tbody>
                 </table>
+=======
+                    <table class="table table-striped stylefont">
+                        <thead class="thead-light">
+                            <tr class="stylefont text-center">
+                                <th class="align-middle">ลำดับที่</th>
+                                <th class="align-middle">รหัสพนักงาน</th>
+                                <th class="align-middle">ชื่อ</th>
+                                <th class="align-middle">ตำแหน่ง</th>
+                                <th>สังกัด</th>
+                                <th>วันที่สมัคร</th>
+                            </tr>
+                        </thead>
+                        {% for student1 in Group1_Qset %}
+                        <tr class="stylefont text-center">
+                            <td class="align-middle">{{ forloop.counter }}</td>
+                            <td class="align-middle">{{ student1.E_ID }}</td>
+                            <td class="align-middle">{{ student1.Fullname }}</td>
+                            <td class="align-middle">{{ student1.Position }} {% if student1.Level == "M1" %}
+                            </td>
+                            {% elif student1.Level == "M2" %}
+                            </td>
+                            {% elif student1.Level == "M3" %}
+                            </td>
+                            {% elif student1.Level == "M4" %}
+                            </td>
+                            {% elif student1.Level == "M5" %}
+                            </td>
+                            {% elif student1.Level == "M6" %}
+                            </td>
+                            {% elif student1.Level == "S1" %}
+                            </td>
+                            {% elif student1.Level == "S2" %}
+                            </td>
+                            {% else %} {{ student1.Level }}</td>
+                            {% endif %}
+                            <td class="align-middle">{{ student1.Dep }}</td>
+                            <td class="align-middle">{{ student1.Regist_Date }}</td>
+                        </tr>
+
+                        {% endfor %}
+                        <tbody>
+                    </table>
+>>>>>>> 1-by-namkhing
                 </div>
 
                 <div><label>เขต กฟก.2</label></div>
@@ -155,6 +271,7 @@
                                 <th>วันที่สมัคร</th>
                             </tr>
                         </thead>
+<<<<<<< HEAD
                             {% for student2 in Group2_Qset %}
                                 <tr class="stylefont text-center">
                                     <td class="align-middle">{{ forloop.counter }}</td>
@@ -185,6 +302,36 @@
                                 </tr>
                                 
                             {% endfor %}
+=======
+                        {% for student2 in Group2_Qset %}
+                        <tr class="stylefont text-center">
+                            <td class="align-middle">{{ forloop.counter }}</td>
+                            <td class="align-middle">{{ student2.E_ID }}</td>
+                            <td class="align-middle">{{ student2.Fullname }}</td>
+                            <td class="align-middle">{{ student2.Position }} {% if student2.Level == "M1" %}
+                            </td>
+                            {% elif student2.Level == "M2" %}
+                            </td>
+                            {% elif student2.Level == "M3" %}
+                            </td>
+                            {% elif student2.Level == "M4" %}
+                            </td>
+                            {% elif student2.Level == "M5" %}
+                            </td>
+                            {% elif student2.Level == "M6" %}
+                            </td>
+                            {% elif student2.Level == "S1" %}
+                            </td>
+                            {% elif student2.Level == "S2" %}
+                            </td>
+                            {% else %} {{ student2.Level }}</td>
+                            {% endif %}
+                            <td class="align-middle">{{ student2.Dep }}</td>
+                            <td class="align-middle">{{ student2.Regist_Date }}</td>
+                        </tr>
+
+                        {% endfor %}
+>>>>>>> 1-by-namkhing
                         <tbody>
                     </table>
                 </div>
@@ -202,6 +349,7 @@
                                 <th>วันที่สมัคร</th>
                             </tr>
                         </thead>
+<<<<<<< HEAD
                             {% for student3 in Group3_Qset %}
                                 <tr class="stylefont text-center">
                                     <td class="align-middle">{{ forloop.counter }}</td>
@@ -232,6 +380,36 @@
                                 </tr>
                                 
                             {% endfor %}
+=======
+                        {% for student3 in Group3_Qset %}
+                        <tr class="stylefont text-center">
+                            <td class="align-middle">{{ forloop.counter }}</td>
+                            <td class="align-middle">{{ student3.E_ID }}</td>
+                            <td class="align-middle">{{ student3.Fullname }}</td>
+                            <td class="align-middle">{{ student3.Position }} {% if student3.Level == "M1" %}
+                            </td>
+                            {% elif student3.Level == "M2" %}
+                            </td>
+                            {% elif student3.Level == "M3" %}
+                            </td>
+                            {% elif student3.Level == "M4" %}
+                            </td>
+                            {% elif student3.Level == "M5" %}
+                            </td>
+                            {% elif student3.Level == "M6" %}
+                            </td>
+                            {% elif student3.Level == "S1" %}
+                            </td>
+                            {% elif student3.Level == "S2" %}
+                            </td>
+                            {% else %} {{ student3.Level }}</td>
+                            {% endif %}
+                            <td class="align-middle">{{ student3.Dep }}</td>
+                            <td class="align-middle">{{ student3.Regist_Date }}</td>
+                        </tr>
+
+                        {% endfor %}
+>>>>>>> 1-by-namkhing
                         <tbody>
                     </table>
                 </div>
@@ -253,5 +431,11 @@
             <li class="breadcrumb-item active">กองพัฒนาบุคลากร แผนกจัดการความรู้ ติดต่อ 5858</li>
         </ol>
     </div>
+<<<<<<< HEAD
     </body>
 </html>
+=======
+</body>
+
+</html>
+>>>>>>> 1-by-namkhing
