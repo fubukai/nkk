@@ -6,7 +6,6 @@ from .forms import SaveForm
 from django.shortcuts import redirect
 import requests, xmltodict
 import string
-from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Q, F
 
 def login(request):
@@ -21,7 +20,7 @@ def login(request):
 
             if check_error > 0 :
             # Emp_id == '303270' or Emp_id == '501249' or Emp_id == '489343' or Emp_id == '235859' or Emp_id == '444717' or Emp_id == '444660':
-                reposeMge = 'true'   
+                reposeMge = 'true'
             else : 
                 check_ID = idm_login(Emp_id,Emp_pass)
                 # print(check_ID)
@@ -90,21 +89,25 @@ def home(request):
     Dept = request.session['Department']
     Dept_code = request.session['Dept_code']
     Position = request.session['Position']
+    LevelCode = request.session['LevelCode']
     Cut_Dept_code = Dept_code[:4]
     print(Cut_Dept_code)
     print(Dept_code)
-
+    print(LevelCode)
+    
+    # if Emp_id == '501103' or Emp_id == '503710' or Emp_id == '499781' or Emp_id == '507599' or Emp_id == '492613' or Emp_id == '497784':
+    # if LevelCode == '07' or LevelCode == '08' or LevelCode == 'M1' or LevelCode == 'M2':
     check_SD = len(Course_Director.objects.filter(E_ID = Emp_id))
 
     check_km = List_Emp.objects.filter(E_ID = Emp_id,ref_course__PK_Course_D__range=(3,6)).exclude(ref_course='8').count()
     print(check_km)
     if Emp_id == '501103' or Emp_id == '503710' or Emp_id == '499781' or Emp_id == '507599' or Emp_id == '492613' or Emp_id == '497784':
         courses = Course_D.objects.all().annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
-    elif check_SD == 1:
+    elif check_SD == 1 and (LevelCode == '07' or LevelCode == '08' or LevelCode == 'M1' or LevelCode == 'M2'):
         courses = Course_D.objects.all().filter(status = 1).annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
     else : 
-        courses = Course_D.objects.all().filter(status = 1).exclude(PK_Course_D__range = (60,61)).annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
-    
+        courses = Course_D.objects.all().exclude(Course_ID='PDD01CO08').filter(status = 1).exclude(PK_Course_D__range = (60,61)).annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
+
     return render(request, 'home.html', {'courses': courses,'Cut_Dept_code':Cut_Dept_code})
 
 
@@ -249,18 +252,6 @@ def checkStudent(Emp_id):
     else :
         rerult = 0
     return rerult
-
-class UsersListJson(BaseDatatableView):
-        # The model we're going to show
-        model = List_Emp
-        columns = ['Fullname', 'Dep', 'Regist_Date']
-        order_columns = ['Regist_Date','Dep','Fullname']
-
-        def filter_queryset(self, qs):
-            sSearch = self.request.GET.get('sSearch', None)
-            if sSearch:
-                qs = qs.filter(Q(Fullname__istartswith=sSearch) | Q(Dep__istartswith=sSearch))
-            return qs
 
 def course_KM(request, PK_Course_D):
     Emp_id = request.session['Emp_id']
