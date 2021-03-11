@@ -25,7 +25,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('update_eng/', views.update_eng, name='update_eng'),
     # url(r'^save_emp', views.save_emp),
-    url(r'^datatable/$', views.UsersListJson, name='order_list_json'),
+    # url(r'^datatable/$', view..UsersListJson,name='order_list_json'),
     path('regist/<int:PK_Course_D>/', views.course_title, name='course_title'),
     path('detial/<int:PK_Course_D>/', views.course_detial, name='course_detial'),
     path('detail_km/<int:PK_Course_D>/', views.course_KM, name='course_KM'),

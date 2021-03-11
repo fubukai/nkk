@@ -103,7 +103,7 @@ def home(request):
     print(check_km)
     if Emp_id == '501103' or Emp_id == '503710' or Emp_id == '499781' or Emp_id == '507599' or Emp_id == '492613' or Emp_id == '497784':
         courses = Course_D.objects.all().annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
-    elif check_SD == 1 and (LevelCode == '07' or LevelCode == '08' or LevelCode == 'M1' or LevelCode == 'M2'):
+    elif check_SD == 1 and (LevelCode == '07' or LevelCode == '08' or LevelCode == 'M1' or LevelCode == 'M2'): # เช็คระดับของนักศึกษา ระดับ7-8
         courses = Course_D.objects.all().filter(status = 1).annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
     else : 
         courses = Course_D.objects.all().exclude(Course_ID='PDD01CO08').filter(status = 1).exclude(PK_Course_D__range = (60,61)).annotate(Gap_number =F('Number_App') - F('Number_People')).order_by('-PK_Course_D')
