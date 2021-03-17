@@ -35,7 +35,7 @@ urlpatterns = [
     path('course_SD_HQ/<int:PK_Course_D>/', views.course_SD_HQ, name='course_SD_HQ'),
     path('course_register_SD_HQ/<int:PK_Course_D>/', views.course_register_SD_HQ, name='course_register_SD_HQ'),
     path('course_SD_RE/<int:PK_Course_D>/', views.course_SD_RE, name='course_SD_RE'),
-    url(r'course_base', views.course_base, name='course_base'),
+    path('course_base/<int:PK_Course_D>/', views.course_base, name='course_base'),
     path('admin/', admin.site.urls),
 
 ]
