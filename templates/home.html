@@ -19,7 +19,9 @@
                     <thead class="thead-light">
                         <tr class="stylefont text-center">
                             <th class="align-middle">ลำดับ</th>
-                            <th class="align-middle">รุ่นที่</th>
+                            <th class="align-middle">หลักสูตร</th>
+                            <th class="align-middle">รุ่น</th>
+                            <th>วันที่เปิดลงทะเบียน</th>
                             <th>วันที่เริ่มต้น</th>
                             <th>วันที่สิ้นสุด</th>
                             <th>สถานที่</th>
@@ -33,9 +35,11 @@
                         {% for course in courses %}
                             <tr>
                                 <td class="align-middle">{{ forloop.counter }}</td>
-                                <td class="align-middle">{{ course.Course_Name }}รุ่นที่ {{ course.Batch_Type }}</td>
-                                <td class="align-middle">{{ course.Start_Date }}</td>
-                                <td class="align-middle">{{ course.End_Date }}</td>
+                                <td class="align-middle">{{ course.Course_Name }}</td>
+                                <td class="align-middle">{% if course.Batch_Type >= '1' %}{{ course.Batch_Type }}{% else %}<label></label>{% endif %}</td>
+                                <td class="align-middle">{{ course.Open_Register|date:'d/m/Y' }}</td>
+                                <td class="align-middle">{{ course.Start_Date|date:'d/m/Y' }}</td>
+                                <td class="align-middle">{{ course.End_Date|date:'d/m/Y' }}</td>
                                 <td class="align-middle">{{ course.Location }}</td>
                                 <td class="align-middle">{{ course.Number_App }}</td>
                                 <td class="align-middle">{{ course.Number_People }}</td>
@@ -71,6 +75,12 @@
                                 {% elif course.PK_Course_D == 52 %}
                                     {% if course.Number_App > course.Number_People %}
                                         <td class="align-middle"><a href="{% url 'course_KM4' course.PK_Course_D %}">ลงทะเบียน</a></td>
+                                    {% else %}
+                                        <td class="align-middle">เต็ม</td>
+                                    {% endif %}
+                                {% elif course.PK_Course_D == 66 %}
+                                    {% if course.Number_App > course.Number_People %}
+                                        <td class="align-middle"><a href="{% url 'course_base' course.PK_Course_D %}">รอเปิดลงทะเบียน</a></td>
                                     {% else %}
                                         <td class="align-middle">เต็ม</td>
                                     {% endif %}

@@ -9,24 +9,7 @@
         <script src="{% static 'js/datatable.js' %}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <script type="text/javascript">
-        var USERS_LIST_JSON_URL = '{% url "order_list_json" %}';
-        var oLanguages = {
-                oPaginate:{
-                    sFirst:'<<',
-                    sLast: '>>',
-                    sNext: '>',
-                    sPrevious: '<'
-                },
-                sInfo:'{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}',
-                sInfoEmpty: '{% trans "No entries to show" %}',
-                sInfoFiltered: '{% trans "(filtered from _MAX_ total entries)" %}',
-                sLengthMenu:'{% trans "Show _MENU_ entries" %}',
-                sProcessing: '{% trans "Processing" %}',
-                sSearch: '{% trans "Filter records:" %}',
-                sZeroRecords: '{% trans "No data to show" %}'
-            }
-        </script>
+        
     </head>
     <body>
         <div class="container mt-5">
@@ -36,7 +19,8 @@
         
         <div class="container mt-2">
             <div class="col-md-12">
-                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} รุ่นที่ {{ course.Batch_Type }}</h3>
+                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} {% if course.Batch_Type >= '1' %} รุ่นที่ {{ course.Batch_Type }} {% else %} <label></label> {% endif %}</h3>
+                  
                 <h3 class="text-center">วันที่เริ่ม {{course.Start_Date}}</h3>
                 <h3 class="text-center">วันที่สิ้นสุด {{course.End_Date}}</h3>
                 <h3 class="text-center">สถานที่จัด {{course.Location}}</h3>
@@ -61,11 +45,13 @@
                                 </div>
                             </div>
                             </br>
+                            {% if course.status == '1' or course.status == 1  %}
                             <div class="row">
                                 <div class="col-sm-12 text-center">
                                     <button type="submit" class="btn btn-success text-center">ลงทะเบียน</button>
                                 </div>
                             </div>
+                            {% endif %}
                             </br>
                                 {% if course.PK_Course_D == 60 or course.PK_Course_D == 61 %}
                                     
@@ -74,6 +60,22 @@
                                             <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ ผพผ. เบอร์ 02-590-5869 หรือ exepea5869@gmail.com</label>
                                         </div>
                                     </div>
+                                {% elif course.PK_Course_D == 66 %}
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <p class="text-danger">{{ course.Course_Detail }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <label class="text-danger">ทาง ผพผ. จะส่ง link เข้าเรียน ผ่าน e-mail ที่ท่านแจ้งไว้ ล่วงหน้า 2 วัน</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ ไปรยา เบอร์ 02-590-5869</label>
+                                    </div>
+                                </div>
 
                                 {% else %}
                                     <div class="row">

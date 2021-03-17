@@ -42,39 +42,14 @@
 
         <div class="container mt-2">
             <div class="col-md-12">
-                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} รุ่นที่ {{ course.Batch_Type }}</h3>
-                <h3 class="text-center">วันที่เริ่ม {{course.Start_Date}}</h3>
-                <h3 class="text-center">วันที่สิ้นสุด {{course.End_Date}}</h3>
+                <h3 class="text-center">หลักสูตร {{ course.Course_Name }} {% if course.Batch_Type >= '1' %} รุ่นที่ {{ course.Batch_Type }} {% else %} <label></label> {% endif %}</h3>
+                  
+                <h3 class="text-center">วันที่เริ่ม {{course.Start_Date|date:'d/m/Y'}}</h3>
+                <h3 class="text-center">วันที่สิ้นสุด {{course.End_Date|date:'d/m/Y'}}</h3>
                 <h3 class="text-center">สถานที่จัด {{course.Location}}</h3>
             </div>
         </div>
-        {% comment %} กล่องที่ 1 {% endcomment %}
-        <div class="grid-item box1">
-            <div class="card">
-                <h3>{{course.subject01}}</h3>
-                <iframe width="350" height="150" src={{course.url01}}>
-                    </iframe>
-                <span>{{course.detail01}}</span>
-            </div>
-        </div>
-        {% comment %} กล่องที่ 2 {% endcomment %}
-        <div class="grid-item box1">
-            <div class="card">
-                <h3>{{course.subject02}}</h3>
-                <iframe width="350" height="150" src={{course.url02}}>
-                    </iframe>
-                <span>{{course.detail02}}</span>
-            </div>
-        </div>
-        {% comment %} กล่องที่ 3 {% endcomment %}
-        <div class="grid-item box1">
-            <div class="card">
-                <h3>{{course.subject03}}</h3>
-                <iframe width="350" height="150" src={{course.url03}}>
-                    </iframe>
-                <span>{{course.detail03}}</span>
-            </div>
-        </div>
+        {% include "suggest.html" %}
         <div class="card p-4">
             <div class="col-md-12 mb-3">
                 <div class="col-md-12 mb-3">
@@ -93,11 +68,13 @@
                                 </div>
                             </div>
                             </br>
+                            {% if course.status == '1' or course.status == 1  %}
                             <div class="row">
                                 <div class="col-sm-12 text-center">
                                     <button type="submit" class="btn btn-success text-center">ลงทะเบียน</button>
                                 </div>
                             </div>
+                            {% endif %}
                             </br>
                             {% if course.PK_Course_D == 60 or course.PK_Course_D == 61 %}
 
@@ -106,7 +83,12 @@
                                     <label>ติดต่อสอบถามรายละเอียดเพิ่มเติม ได้ที่ ผพผ. เบอร์ 02-590-5869 หรือ exepea5869@gmail.com</label>
                                 </div>
                             </div>
-
+                            {% elif course.PK_Course_D == 66 %}
+                                <div class="row">
+                                    <div class="col-sm-12 text-center">
+                                        <p class="text-danger">{{ course.Course_Detail }}</p>
+                                    </div>
+                                </div>
                             {% else %}
                             <div class="row">
                                 <div class="col-sm-12 text-center">
