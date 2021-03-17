@@ -8,7 +8,7 @@ class MT_User(models.Model):
     Permit_Group = models.CharField(max_length=5,null=True)
     Key_Date =  models.DateTimeField(auto_now_add=True)
     
-       
+
 class Course_D(models.Model):
     PK_Course_D = models.AutoField(primary_key=True)
     Course_ID = models.CharField(max_length=15, unique=True)
@@ -34,30 +34,37 @@ class Course_D(models.Model):
     Start_Time = models.DateTimeField(null=True)
     End_Time = models.DateTimeField(null=True)
     status = models.IntegerField(null=True, default=1)
-    Mc_no = models.IntegerField(null=True, default=1)
+    Access_level = models.IntegerField(null=True,default=1)
     def __str__(self):
-        return self.Course_ID
-
-#รายวิชา
-class Subject(models.Model):
-    Subject_no = models.AutoField(primary_key=True)
-    Subject_name = models.CharField(max_length=150,null = True)
-    Description = models.CharField(max_length=150,null = True)
-    Url_location = models.CharField(max_length=100, blank = True)
-    def __str__(self):
-        return self.Subject_no
+        return self.Course_Name
 
 #แบ่งตาม conpetency
 class Competency(models.Model):
-    Mc_no = models.AutoField(primary_key=True)
-    Mc_name = models.CharField(max_length=100,null=True)
-    Mc_level = models.IntegerField(null=True,default=1)
-    ref_subject = models.ForeignKey(Subject, related_name='Reference',on_delete = models.CASCADE,null=True)
+    Comp_ID = models.AutoField(primary_key=True)
+    Comp_name = models.CharField(max_length=100,null=True)
+    Comp_type = models.CharField(max_length=2,null=True)# MC CC FC
+    Comp_level = models.IntegerField(null=True,default=1)
     def __str__(self):
-        return self.Mc_no
+        return self.Comp_name
+
+#รายวิชา
+class Subject(models.Model):
+    Subject_ID = models.AutoField(primary_key=True)
+    Subject_name = models.CharField(max_length=150,null = True)
+    Description = models.CharField(max_length=300,null = True)
+    Url_location = models.CharField(max_length=100, blank = True)
+    ref_cou = models.ForeignKey(Course_D, related_name='referrence_course',on_delete=models.CASCADE,null=True)
+    #ref_comp = models.ForeignKey(Competency, related_name='Reference',on_delete = models.CASCADE,null=True)
+    def __str__(self):
+        return self.Subject_name
+
+#วิธีเรียกใช้งาน related_name คือ ชื่อในrelated_nameตามด้วย_ _ชื่อตัวแปร เช่น Course_score__ID
+class Relation_comp(models.Model):
+    Course_ID = models.ForeignKey(Course_D,related_name='Course_relation', on_delete=models.CASCADE,null = True)
+    Subject_ID = models.ForeignKey(Subject, related_name='Subject_relation',on_delete=models.CASCADE,null=True)
 
 #ตารางความสัมพันธ์ subject com
-class Relation_course(models.Model):
+class Relation_subject(models.Model):
     Mc_no = models.ForeignKey(Competency, related_name='Ref_Mc',on_delete=models.CASCADE,null=True)
     Subject_no = models.ForeignKey(Subject, related_name='Ref_sub',on_delete=models.CASCADE,null=True)
 
